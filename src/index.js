@@ -1,5 +1,6 @@
 import { getData } from "./weatherApi.js";
+import Display from "./Display.js";
 
 
-const coords = getData('Toronto');
+Display.loadPage('Toronto');
 
