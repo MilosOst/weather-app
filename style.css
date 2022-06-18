@@ -45,12 +45,12 @@ body {
 .search-btn {
     background-color: inherit;
     border: none;
+    cursor: pointer;
 }
 
 .current-info {
     text-align: center;
     border-radius: 8px;
-    border: 1px solid black;
     margin-top: 1rem;
 
     background: var(--blue-bg);
@@ -60,6 +60,10 @@ body {
 #today-img {
     height: 100px;
     width: 100px;
+}
+
+#weather-type {
+    text-transform: capitalize;
 }
 
 #today-temp {
