@@ -6,7 +6,6 @@
 
 :root {
     font-size: 16px;
-    --blue-bg: linear-gradient(135deg, rgb(46, 165, 242) 0%, rgb(110, 210, 255) 100%);
 }
 
 body, html, .container {
@@ -21,7 +20,12 @@ body {
 .container {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     padding: 1rem;
+    background: url(./imgs/app-bg.jpg) no-repeat 0 0;
+    background-size: cover;
+    overflow: auto;
+    color: white;
 }
 
 .search-box {
@@ -33,13 +37,27 @@ body {
 
     padding: 4px 8px;
     margin-bottom: 8px;
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 8px;
 }
 
 #location-search {
     outline: none;
     border: none;
+    background-color: inherit;
+    color: white;
+}
+
+#location-search::placeholder {
+    color: white;
+}
+
+#location-search::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: url(./imgs/x.svg) no-repeat 50% 50%;
+    color: white;
 }
 
 .search-btn {
@@ -53,7 +71,6 @@ body {
     border-radius: 8px;
     margin-top: 1rem;
 
-    background: var(--blue-bg);
     color: white;
 }
 
@@ -82,23 +99,19 @@ body {
     align-items: center;
 
     padding: 0.5rem 1rem;
-    border-top: 1px solid black;
-
+    border-top: 1px solid white;
 }
 
+
 .info-item:nth-child(2n) {
-    border-left: 1px solid black;
+    border-left: 1px solid white;
 }
 
 .info-text {
     flex: 1;
 }
 
-.info-title {
-    font-size: 0.8rem;
-}
-
-.info-text > p {
+.info-title, .info-text > p {
     font-size: 0.8rem;
 }
 
@@ -109,25 +122,51 @@ body {
 
 .forecast-header {
     display: flex;
-    justify-content: space-between;
 }
 
-.forecast-breakdown {
-    display: flex;
+.option-select {
+    margin-right: 1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: inherit;
+    color: white;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.option-select.selected {
+    border: 2px solid white;
+}
+
+.forecast-hourly, .forecast-daily {
+    display: none;
     gap: 1rem;
-    overflow-x: auto;
+    overflow-x: scroll;
     margin-top: 1rem;
+
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.forecast-hourly.active, .forecast-daily.active {
+    display: flex;
 }
 
 .forecast-entry {
     flex: 1;
-    border: 1px solid black;
     border-radius: 8px;
     padding: 8px;
     text-align: center;
 }
 
-.forecast-temp {
+.forecast-temp, .time {
     font-weight: 700;
 }
+
+.forecast-img {
+    width: calc(3rem + 2vw);
+}
+
 
