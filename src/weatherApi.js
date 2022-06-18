@@ -8,6 +8,7 @@ function formatTime(time) {
     return time.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric'});
 }
 
+
 async function getCityCoordinates(city, stateOrCountry='') {
     try {
         const request = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${city},${stateOrCountry}&limit=1&appid=${apiKey}`);
@@ -31,14 +32,14 @@ async function getTodayData(longitude, latitude) {
     return data;
 }
 
-async function get5DayData(longitude, latitude) {
-    const request = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}`, { mode: 'cors' });
+async function getForecastData(longitude, latitude) {
+    const request = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=&appid=${apiKey}`);
     const data = await request.json();
 
     return data;
 }
 
-async function filterTodayData(data, cityName) {
+function filterTodayData(data, cityName) {
     const date = convertDate(new Date().getTime(), data.timezone);
     const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
     return {
@@ -56,14 +57,33 @@ async function filterTodayData(data, cityName) {
     };
 }
 
-async function filter5DayData(data) {
-    const dayOne = data.slice(0, 8);
-    const dayTwo = data.slice(8, 16);
-    const dayThree = data.slice(16, 24);
-    const dayFour = data.slice(24, 32);
-    const dayFive = data.slice(32, 40);
+function filterHourlyData(data) {
+    const hourlyData = data.hourly.slice(0, 25);
+    const hourlyEntries = [];
+    hourlyData.forEach(hourData => {
+        hourlyEntries.push(
+            {
+                time: convertDate(hourData.dt*1000, data.timezone_offset).toLocaleTimeString('en-US', {hour: 'numeric'}),
+                icon: `./imgs/weather-icons/${hourData.weather[0].icon}.svg`,
+                temp: (hourData.temp - 273.15).toFixed(1),
+            }
+        );
+    });
+    return hourlyEntries;
+}
 
-    return { dayOne, dayTwo, dayThree, dayFour, dayFive};
+function filterDailyData(data) {
+    const dailyData = data.daily.slice(1);
+    const dailyEntries = [];
+    dailyData.forEach(day => {
+        dailyEntries.push({
+            day: convertDate(day.dt*1000, data.timezone_offset).toLocaleDateString('en-US', {weekday: 'long'}),
+            icon: `./imgs/weather-icons/${day.weather[0].icon}.svg`,
+            tempMin: (day.temp.min - 273.15).toFixed(),
+            tempMax: (day.temp.max - 273.15).toFixed(),
+        }); 
+    });
+    return dailyEntries;
 }
 
 async function getData(city, stateOrCountry='') {
@@ -75,18 +95,18 @@ async function getData(city, stateOrCountry='') {
 
 
         const todayData = await getTodayData(longitude, latitude);
-        const fiveDayData = await get5DayData(longitude, latitude)
-        console.log(todayData);
+        const forecastData = await getForecastData(longitude, latitude);
 
 
-        const todayDataFiltered = await filterTodayData(todayData, cityName);
-        const fiveDayFiltered = await filter5DayData(fiveDayData.list);
-        console.log(todayDataFiltered);
-        console.log(fiveDayFiltered);
+        const todayDataFiltered = filterTodayData(todayData, cityName);
+        const hourlyDataFiltered = filterHourlyData(forecastData);
+        const dailyDataFiltered = filterDailyData(forecastData);
+        console.log(dailyDataFiltered);
 
         return {
             todayMain: todayDataFiltered,
-            fiveDay: fiveDayFiltered,
+            hourlyData: hourlyDataFiltered,
+            dailyData: dailyDataFiltered,
         }
     }
     catch (e) {
