@@ -1,8 +1,7 @@
-import { getData } from "./weatherApi.js";
+import { getData } from './weatherApi.js';
 
 export default class Display {
-    
-    static async loadPage(city, secondary='') {
+    static async loadPage(city, secondary = '') {
         try {
             const fullData = await getData(city, secondary);
 
@@ -11,11 +10,9 @@ export default class Display {
             this.loadHourlyForecast(fullData.hourlyData);
             this.loadDailyForecast(fullData.dailyData);
             this.initButtons();
-        }
-        catch (e) {
+        } catch (e) {
             Display.showError();
         }
-
     }
 
     static loadMainInfo(data) {
@@ -35,7 +32,7 @@ export default class Display {
         const forecastSection = document.querySelector('.forecast-hourly');
         forecastSection.textContent = '';
 
-        data.forEach(entry => {
+        data.forEach((entry) => {
             forecastSection.appendChild(this.createHourlyForecastEntry(entry));
         });
     }
@@ -44,7 +41,7 @@ export default class Display {
         const forecastSection = document.querySelector('.forecast-daily');
         forecastSection.textContent = '';
 
-        data.forEach(entry => {
+        data.forEach((entry) => {
             forecastSection.appendChild(this.createDailyForecastEntry(entry));
         });
     }
@@ -54,19 +51,18 @@ export default class Display {
         const forecastDaily = document.querySelector('.forecast-daily');
 
         // Allow for horizontal scrolling with mouse wheel
-        forecastHourly.addEventListener('wheel', e => {
+        forecastHourly.addEventListener('wheel', (e) => {
             e.preventDefault();
             forecastHourly.scrollLeft += e.deltaY;
         });
 
-        forecastDaily.addEventListener('wheel', e => {
+        forecastDaily.addEventListener('wheel', (e) => {
             e.preventDefault();
             forecastDaily.scrollLeft += e.deltaY;
         });
 
-
         const toggleModeBtns = document.querySelectorAll('.option-select');
-        toggleModeBtns.forEach(btn => {
+        toggleModeBtns.forEach((btn) => {
             btn.addEventListener('click', this.switchForecastMode);
         });
 
@@ -113,7 +109,7 @@ export default class Display {
         const searchInput = document.querySelector('#location-search').value;
         let city = searchInput;
         let secondary;
-        
+
         // Check if State/Country provided
         if (searchInput.includes(',')) {
             city = searchInput.split(',')[0];
@@ -136,6 +132,4 @@ export default class Display {
         const error = document.querySelector('.error');
         error.innerHTML = 'Location not found.<br>Search must be in the form: "City", "City, State", or "City, Country"';
     }
-
-
 }
