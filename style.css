@@ -20,12 +20,19 @@ body {
 .container {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     padding: 1rem;
     background: url(./imgs/app-bg.jpg) no-repeat 0 0;
     background-size: cover;
     overflow: auto;
     color: white;
+}
+
+.search-area {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin-bottom: 8px;
 }
 
 .search-box {
@@ -36,7 +43,7 @@ body {
     gap: 1rem;
 
     padding: 4px 8px;
-    margin-bottom: 8px;
+
     border: 2px solid black;
     border-radius: 8px;
 }
@@ -60,10 +67,18 @@ body {
     color: white;
 }
 
+
 .search-btn {
     background-color: inherit;
     border: none;
     cursor: pointer;
+}
+
+.error {
+    color: red;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem
 }
 
 .current-info {
@@ -81,6 +96,7 @@ body {
 
 #weather-type {
     text-transform: capitalize;
+    font-size: 1.5rem;
 }
 
 #today-temp {
@@ -107,12 +123,22 @@ body {
     border-left: 1px solid white;
 }
 
+.info-img {
+    height: 32px;
+    width: 32px;
+}
+
+.info-img > img {
+    height: inherit;
+    width: inherit;
+}
+
 .info-text {
     flex: 1;
 }
 
 .info-title, .info-text > p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 .forecast {
@@ -152,6 +178,7 @@ body {
 
 .forecast-hourly.active, .forecast-daily.active {
     display: flex;
+    background-color: rgba(0 0 0 / 30%)
 }
 
 .forecast-entry {
@@ -169,4 +196,15 @@ body {
     width: calc(3rem + 2vw);
 }
 
+@media (min-width: 400px) {
+    #today-img {
+        height: 125px;
+        width: 125px;
+    }
+}
 
+@media (min-width:768px) {
+    :root {
+        font-size: 18px;
+    }
+}

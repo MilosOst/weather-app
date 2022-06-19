@@ -14,11 +14,14 @@
 </head>
 <body>
     <div class="container">
-        <div class="search-box">
-            <input type="search" placeholder="Search Location" id="location-search">
-            <button class="search-btn">
-                <img src="./imgs/search.svg" alt="">
-            </button>
+        <div class="search-area">
+            <form class="search-box" autocomplete="off">
+                <input type="search" placeholder="Search Location" id="location-search">
+                <button type="submit" class="search-btn">
+                    <img src="./imgs/search.svg" alt="">
+                </button>
+            </form>
+            <p class="error"></p>
         </div>
         <h2 id="location"></h2>
         <main class="current-info">
