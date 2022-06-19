@@ -3,12 +3,19 @@ import { getData } from "./weatherApi.js";
 export default class Display {
     
     static async loadPage(city, secondary='') {
-        const fullData = await getData(city, secondary);
+        try {
+            const fullData = await getData(city, secondary);
 
-        this.loadMainInfo(fullData.todayMain);
-        this.loadHourlyForecast(fullData.hourlyData);
-        this.loadDailyForecast(fullData.dailyData);
-        this.initButtons();
+            this.clearInputs();
+            this.loadMainInfo(fullData.todayMain);
+            this.loadHourlyForecast(fullData.hourlyData);
+            this.loadDailyForecast(fullData.dailyData);
+            this.initButtons();
+        }
+        catch (e) {
+            Display.showError();
+        }
+
     }
 
     static loadMainInfo(data) {
@@ -61,7 +68,10 @@ export default class Display {
         const toggleModeBtns = document.querySelectorAll('.option-select');
         toggleModeBtns.forEach(btn => {
             btn.addEventListener('click', this.switchForecastMode);
-        })
+        });
+
+        const searchBar = document.querySelector('.search-box');
+        searchBar.onsubmit = this.validateSearch;
     }
 
     static createHourlyForecastEntry(entry) {
@@ -96,6 +106,35 @@ export default class Display {
         document.querySelector('.forecast-hourly').classList.toggle('active');
         document.querySelector('#hour-select').classList.toggle('selected');
         document.querySelector('#daily-select').classList.toggle('selected');
+    }
+
+    static async validateSearch(e) {
+        e.preventDefault();
+        const searchInput = document.querySelector('#location-search').value;
+        let city = searchInput;
+        let secondary;
+        
+        // Check if State/Country provided
+        if (searchInput.includes(',')) {
+            city = searchInput.split(',')[0];
+            secondary = searchInput.split(',')[1];
+        }
+        else {
+            secondary = '';
+        }
+
+        // Try and find data with provided information
+        Display.loadPage(city, secondary);
+    }
+
+    static clearInputs() {
+        document.querySelector('.error').textContent = '';
+        document.querySelector('.search-box').reset();
+    }
+
+    static showError() {
+        const error = document.querySelector('.error');
+        error.innerHTML = 'Location not found.<br>Search must be in the form: "City", "City, State", or "City, Country"';
     }
 
 

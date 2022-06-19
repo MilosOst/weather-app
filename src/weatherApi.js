@@ -93,15 +93,12 @@ async function getData(city, stateOrCountry='') {
         const latitude = coordinates.latitude;
         const cityName = coordinates.name;
 
-
         const todayData = await getTodayData(longitude, latitude);
         const forecastData = await getForecastData(longitude, latitude);
-
 
         const todayDataFiltered = filterTodayData(todayData, cityName);
         const hourlyDataFiltered = filterHourlyData(forecastData);
         const dailyDataFiltered = filterDailyData(forecastData);
-        console.log(dailyDataFiltered);
 
         return {
             todayMain: todayDataFiltered,
@@ -110,7 +107,7 @@ async function getData(city, stateOrCountry='') {
         }
     }
     catch (e) {
-        console.log('Location not found.\n\Search must be in the form: "City", "City, State", or "City, Country"');
+        return;
     }
 
 }
