@@ -10,7 +10,7 @@ function formatTime(time) {
 
 async function getCityCoordinates(city, stateOrCountry = '') {
     try {
-        const request = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${stateOrCountry}&limit=1&appid=${apiKey}`);
+        const request = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city},${stateOrCountry}&limit=1&appid=${apiKey}`, { mode: 'cors' });
         const info = await request.json();
         const [longitude, latitude, name] = [info[0].lon, info[0].lat, info[0].name];
 
@@ -21,14 +21,14 @@ async function getCityCoordinates(city, stateOrCountry = '') {
 }
 
 async function getTodayData(longitude, latitude) {
-    const request = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`);
+    const request = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`, { mode: 'cors' });
     const data = await request.json();
 
     return data;
 }
 
 async function getForecastData(longitude, latitude) {
-    const request = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=&appid=${apiKey}`);
+    const request = await fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=&appid=${apiKey}`, { mode: 'cors' });
     const data = await request.json();
 
     return data;
